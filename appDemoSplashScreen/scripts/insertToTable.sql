@@ -1,0 +1,1 @@
+INSERT INTO LIBRARY Values("+bookName+","+authorFname+","+authorLname+","+publisher+","+price+","+category+","+subcategory+","+readed+");     
