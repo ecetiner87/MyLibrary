@@ -42,7 +42,7 @@ import net.miginfocom.swing.MigLayout;
 
 /**
  * @author erkance
- *
+ * Bibliophile v1.0 is the Library Application which helps you to keep your book records.
  */
 
 
