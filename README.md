@@ -18,7 +18,7 @@ Related application is a GUI application based on JAVA Swing. It also uses embed
 
 * Download "Bibliophile.exe" to any folder on your PC.
 
-* You should have JRE 1.6.0 at minimum.
+* You should have latest Java Runtime Environment.
 
 
 ### Execution of Application
