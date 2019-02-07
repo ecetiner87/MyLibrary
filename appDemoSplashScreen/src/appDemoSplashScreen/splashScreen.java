@@ -4,23 +4,33 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.FileDialog;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -37,6 +47,9 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -50,14 +63,15 @@ public class splashScreen {
 	
 	static class myGUI{
 
-		JFrame frame = new JFrame("BiblioPhile 1.0");
+		JFrame frame = new JFrame("BiblioPhile 2.0");
 		JPanel actionPanel, queryPanel;
 		JMenuBar menuBar;
 		JMenu fileMenu, helpMenu;
 		JMenuItem about,quitItem;
-		JButton showLibrary, addBook, deleteBook, searchBook, updateBook, wishList;  
+		JButton showLibrary, addBook, deleteBook, searchBook, updateBook, wishList, bookbyyear;  
 		Image appLogo;
 		DBConnection connect = new DBConnection();
+		File file = new File("testFile1.txt");
 		
 		
 		public myGUI() throws IOException{
@@ -80,6 +94,9 @@ public class splashScreen {
 			searchBook = new JButton("Search Book");
 			updateBook = new JButton("Update Book");
 			wishList = new JButton("WishList");
+			bookbyyear = new JButton("Read History");
+
+
 			
 			showLibrary.setMaximumSize(new Dimension(175,30));			
 			addBook.setMaximumSize(new Dimension(175,30));
@@ -87,6 +104,16 @@ public class splashScreen {
 			searchBook.setMaximumSize(new Dimension(175,30));
 			updateBook.setMaximumSize(new Dimension(175,30));
 			wishList.setMaximumSize(new Dimension(175,30));
+			bookbyyear.setMaximumSize(new Dimension(175,30));
+
+			
+			if (file.createNewFile())
+			{
+			    System.out.println("File is created!");
+			} else {
+			    System.out.println("File already exists.");
+			}
+			 
 			
 			addBook.addActionListener(new ActionListener() {
 		        public void actionPerformed(ActionEvent e) {
@@ -124,6 +151,19 @@ public class splashScreen {
 		        }
 		    });
 			
+			bookbyyear.addActionListener(new ActionListener() {
+		        public void actionPerformed(ActionEvent e) {
+		        		try {
+							bookhistoryGUI();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+		        }
+		    });
+			
+			
+			
 			actionPanel.setLayout(new BoxLayout(actionPanel, BoxLayout.Y_AXIS));
 			actionPanel.add(showLibrary);
 			actionPanel.add(addBook);
@@ -131,6 +171,9 @@ public class splashScreen {
 			actionPanel.add(searchBook);
 			actionPanel.add(updateBook);
 			actionPanel.add(wishList);
+			actionPanel.add(bookbyyear);
+
+			
 			
 			queryPanel.add(imagelabel);		
 
@@ -448,6 +491,9 @@ public class splashScreen {
 			JTextField field2= new JTextField(5);
 			JLabel label3 = new JLabel("Total Value of Library(TL):");
 			JTextField field3= new JTextField(5);
+			JButton export = new JButton("Export All Library");
+			JButton impToLib = new JButton("Import to Library");
+
 
 			JTable table = new JTable();
 			
@@ -492,24 +538,111 @@ public class splashScreen {
 			
 			field.setText(totalbooknumber);
 			field.setEditable(false);
-			//field.setBackground(Color.DARK_GRAY);
-			//field.setFont(new Font("Serif", Font.BOLD, 20));
 			field2.setText(totalreadnumber);
 			field2.setEditable(false);
 			field3.setText(totallibrprice);
 			field3.setEditable(false);
 			
 			
+			export.addActionListener(new ActionListener() {
+		        public void actionPerformed(ActionEvent e) {
+		        	JFileChooser fileChooser = new JFileChooser();
+		        	fileChooser.setSelectedFile(new File("MyLibrary.csv"));
+		        	 int returnVal = fileChooser.showSaveDialog(null);
+		        	    if (returnVal == JFileChooser.APPROVE_OPTION) {
+		        	        try {
+		        	            File file = fileChooser.getSelectedFile();
+		        	            PrintWriter os = new PrintWriter(file);
+		        	            os.println("");
+		        	            for (int col = 0; col < table.getColumnCount(); col++) {
+		        	                os.print(table.getColumnName(col) + "\t");
+		        	            }
+
+		        	            os.println("");
+		        	            os.println("");
+
+		        	            for (int i = 0; i < table.getRowCount(); i++) {
+		        	                for (int j = 0; j < table.getColumnCount(); j++) {
+		        	                    os.print(table.getValueAt(i, j).toString() + "\t");
+
+		        	                }
+		        	                os.println("");
+		        	            }
+		        	            os.close();
+		        	            System.out.println("Done!");
+		        	        } catch (IOException e2) {
+		        	            // TODO Auto-generated catch block
+		        	            e2.printStackTrace();
+		        	        }
+		        	    }
+		        	 }
+		    });
+			
+			impToLib.addActionListener(new ActionListener() {
+		        public void actionPerformed(ActionEvent e) {
+		        	int result=0;
+		        	
+		        	Path path;
+		        	JFileChooser jd = new JFileChooser();
+		        	jd.setDialogTitle("Choose input file");
+		        	
+		        	int returnVal= jd.showOpenDialog(null);
+		        	if(returnVal != JFileChooser.APPROVE_OPTION) {
+		        		path = null;
+		        	}
+		        	
+		        	path = jd.getSelectedFile().toPath();
+		        	String ext = getFileExtension(path);
+		        	
+		           System.out.println(path + " chosen.");
+		           System.out.println(ext);
+		           
+		           if(ext.equals("txt")  || ext.equals("csv")) {
+
+		           
+		        	   result = connect.importLibrary(path);
+		           
+		        	   if(result==1) {
+		        		   JOptionPane.showMessageDialog(null, "Records imported successfully!","SUCCESS",JOptionPane.INFORMATION_MESSAGE);    
+
+		        	   }
+		        	   else
+	        		 
+		        	   {
+			        	 JOptionPane.showMessageDialog(null, "Records Could NOT IMPORTED . Error!","ERROR",JOptionPane.ERROR_MESSAGE);    
+
+		        	   }
+		            
+		           }
+		           else
+		           {
+
+			        	 JOptionPane.showMessageDialog(null, "No Valid Input. Use CSV or TXT files only. Error!","ERROR",JOptionPane.ERROR_MESSAGE);    
+
+		           }
+		        	 }
+		    });
 			
 			tablePanel.add(scroll);
 			countPanel.setLayout(new BoxLayout(countPanel, BoxLayout.Y_AXIS));
 			countPanel.add(label);
+			countPanel.add(Box.createRigidArea(new Dimension(0,5)));
 			countPanel.add(field);
+			countPanel.add(Box.createRigidArea(new Dimension(0,5)));
 			countPanel.add(label2);
+			countPanel.add(Box.createRigidArea(new Dimension(0,5)));
 			countPanel.add(field2);
+			countPanel.add(Box.createRigidArea(new Dimension(0,5)));
 			countPanel.add(label3);
+			countPanel.add(Box.createRigidArea(new Dimension(0,5)));
 			countPanel.add(field3);
-
+			countPanel.add(Box.createRigidArea(new Dimension(0,5)));
+			countPanel.add(export);
+			countPanel.add(Box.createRigidArea(new Dimension(0,5)));
+			countPanel.add(impToLib);
+			
+			
+			
 			
 			queryPanel.setLayout(new FlowLayout());
 			queryPanel.add(tablePanel);
@@ -576,9 +709,26 @@ public class splashScreen {
 		        }
 		    });
 			
+			JButton deleteAll = new JButton("Delete All");
+			deleteAll.addActionListener(new ActionListener() {
+		        public void actionPerformed(ActionEvent e) {
+		        	
+		     
+		        	int dialogDelete=JOptionPane.showConfirmDialog(null,"Are you sure you want to delete all library? There is no turning back! ", "DELETE BOOK",JOptionPane.YES_NO_OPTION);
+		            
+		        	if(dialogDelete==JOptionPane.YES_OPTION){      
+		   
+		            	connect.deleteAllBooks();
+		            }
+		        	 
+		        }
+		    });
+			
+			
 			queryPanel.setLayout(new FlowLayout());
 			queryPanel.add(scroll);
 			queryPanel.add(deleteBook);
+			queryPanel.add(deleteAll);
 			queryPanel.setBorder(BorderFactory.createTitledBorder("DELETE BOOK"));
 			queryPanel.revalidate();
 			queryPanel.repaint();
@@ -706,7 +856,6 @@ public class splashScreen {
 		            	authorLnameField.setText(alname); 
 		            	readField.setSelectedItem(readst);
 		            	System.out.println(id);
-		            	//connect.updateBook(id);
 		            }
 		            }
 		        	 }
@@ -727,6 +876,41 @@ public class splashScreen {
 			        	 
 		        		 if(result==1) {
 			        	 JOptionPane.showMessageDialog(null, "Record Updated Successfully!","SUCCESS",JOptionPane.INFORMATION_MESSAGE);    
+			        	
+			        	 	if(readField.getSelectedItem().equals("YES")) {
+			        		
+			        	 		String timeStamp = new SimpleDateFormat("yyyy/MM/dd_HH:mm:ss").format(Calendar.getInstance().getTime());
+			        	 		String textToAppend = "*** "+bookNameField.getText() + " is finished on " + timeStamp;
+			        	 		
+			        	 		 BufferedWriter writer = null;
+								try {
+									writer = new BufferedWriter(
+									            new FileWriter(file, true));
+								} catch (IOException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								} 
+			        	 		 try {
+									writer.newLine();
+									writer.newLine();
+								} catch (IOException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}   
+			        	 		 try {
+									writer.write(textToAppend);
+								} catch (IOException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+			        	 		 try {
+									writer.close();
+								} catch (IOException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+			        	 		
+			        	 	}
 
 		        		 }
 		        		 else
@@ -1005,6 +1189,33 @@ public class splashScreen {
 			queryPanel.repaint();
 		}
 		
+		public void bookhistoryGUI() throws IOException {
+			
+			queryPanel.removeAll();
+			JTextArea textbox = new JTextArea(25,80);
+			
+			
+			JScrollPane scroll = new JScrollPane(textbox);
+			scroll.setPreferredSize(new Dimension(920, 300));
+			scroll.setHorizontalScrollBarPolicy(
+			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			scroll.setVerticalScrollBarPolicy(
+			JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED); 
+			
+			BufferedReader in = new BufferedReader(new FileReader(file));
+			String line = in.readLine();
+			while(line != null){
+			  textbox.append(line + "\n");
+			  line = in.readLine();
+			}
+			
+			queryPanel.setLayout(new FlowLayout());
+			queryPanel.add(scroll);
+			queryPanel.setBorder(BorderFactory.createTitledBorder("RECENT BOOK HISTORY"));
+			queryPanel.revalidate();
+			queryPanel.repaint();
+		}
+		
 		public static boolean isNumeric(String strNum) {
 		    try {
 		        double d = Double.parseDouble(strNum);
@@ -1024,6 +1235,13 @@ public class splashScreen {
 		
 	}
 
+	   private static String getFileExtension(Path file) {
+	        Path filePath = file.getFileName();
+	        String fileName = filePath.toString();
+	        if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
+	        return fileName.substring(fileName.lastIndexOf(".")+1);
+	        else return "";
+	    }
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub

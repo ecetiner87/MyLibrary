@@ -3,6 +3,7 @@
  */
 package appDemoSplashScreen;
 
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -198,6 +199,64 @@ public class DBConnection {
 				e.printStackTrace();
 			}
 			
+		}
+		
+		public  void deleteAllBooks() {
+			try {
+				
+				
+				String deleteSQL = "DELETE FROM LIBRARY";
+				PreparedStatement stmt = conn.prepareStatement(deleteSQL);
+				stmt.executeUpdate();
+				stmt.close();
+	
+				if (this.conn != null) {
+					System.out.println("All Records are deleted from Library Successfully!");
+					conn.createStatement().close();
+				
+				}
+				}
+				catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+		
+		public int importLibrary(Path path) {
+			int result = 0;
+			
+			try {
+				
+	
+				String mypath = path.toString();
+	            String importSQL = "CALL SYSCS_UTIL.SYSCS_IMPORT_DATA (?,?,?,?,?,?,?,?,?)";
+				PreparedStatement stmt = conn.prepareStatement(importSQL);
+				stmt.setString( 1, null );
+				stmt.setString( 2, "LIBRARY");
+				stmt.setString( 3, "BOOKNAME,AUTHOR_FNAME,AUTHOR_LNAME,PUBLISHER,PRICE,CATEGORY,SUBCATEGORY,PUBLISHDATE,TRANSLATOR,READED");
+				stmt.setString( 4, null);
+				stmt.setString( 5, mypath );
+				stmt.setString( 6, null );
+				stmt.setString( 7, null );
+				stmt.setString( 8, null );
+				stmt.setInt( 9, 0 );
+				stmt.executeUpdate();
+				stmt.close();
+	
+				if (this.conn != null) {
+					System.out.println("All Records are imported from related file successfully!");
+					conn.createStatement().close();
+					result=1;
+				
+				}
+				}
+				catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return result;
 		}
 		
 		public  void searchLibrary(String searchby, String criteria, JTable table, DefaultTableModel model) {
