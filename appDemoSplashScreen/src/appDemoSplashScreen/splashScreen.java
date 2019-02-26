@@ -496,6 +496,7 @@ public class splashScreen {
 
 
 			JTable table = new JTable();
+			table.setAutoCreateRowSorter(true);
 			
 			String[] columnNames = {"BOOKID", "BOOKNAME", "AUTHOR_FNAME", "AUTHOR_LNAME", "PUBLISHER", "PRICE", "CATEGORY", "SUBCATEGORY", "PUBLISHDATE", "TRANSLATOR", "READ"};
 			DefaultTableModel model = new DefaultTableModel();
@@ -675,7 +676,8 @@ public class splashScreen {
 		    //table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 		    table.setAutoResizeMode( JTable.AUTO_RESIZE_OFF );
 			table.setFillsViewportHeight(true);
-		
+			table.setAutoCreateRowSorter(true);
+
 			JScrollPane scroll = new JScrollPane(table);
 			scroll.setPreferredSize(new Dimension(920, 300));
 			scroll.setHorizontalScrollBarPolicy(
@@ -759,7 +761,8 @@ public class splashScreen {
 		    //table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 		    table.setAutoResizeMode( JTable.AUTO_RESIZE_OFF );
 			table.setFillsViewportHeight(true);
-		
+			table.setAutoCreateRowSorter(true);
+
 			JScrollPane scroll = new JScrollPane(table);
 			scroll.setPreferredSize(new Dimension(920, 200));
 			scroll.setHorizontalScrollBarPolicy(
