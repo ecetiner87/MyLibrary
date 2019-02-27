@@ -446,6 +446,28 @@ public class DBConnection {
 			return totalReadCount;
 		}
 		 
+		 public  int countCAT(JTable table, String cat) {
+				
+				int totalCount = 0;
+
+				try
+				{ 
+				
+				String sql = "select count(*) as MY_COUNT from LIBRARY WHERE CATEGORY = ?";
+				PreparedStatement ps = conn.prepareStatement(sql);
+				ps.setString( 1, cat );
+				
+				java.sql.ResultSet rs =  ps.executeQuery();
+				rs.next();
+				totalCount = rs.getInt("MY_COUNT");		
+				}
+				catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return totalCount;
+		}
+		 
 		 public  double sumPriceBooks(JTable table) {
 				
 				double totalPrice = 0;

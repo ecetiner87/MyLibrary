@@ -68,7 +68,7 @@ public class splashScreen {
 		JMenuBar menuBar;
 		JMenu fileMenu, helpMenu;
 		JMenuItem about,quitItem;
-		JButton showLibrary, addBook, deleteBook, searchBook, updateBook, wishList, bookbyyear;  
+		JButton showLibrary, addBook, deleteBook, searchBook, updateBook, wishList, bookbyyear,statistics;  
 		Image appLogo;
 		DBConnection connect = new DBConnection();
 		File file = new File("testFile1.txt");
@@ -95,6 +95,7 @@ public class splashScreen {
 			updateBook = new JButton("Update Book");
 			wishList = new JButton("WishList");
 			bookbyyear = new JButton("Read History");
+			statistics = new JButton("Statistics");
 
 
 			
@@ -105,6 +106,8 @@ public class splashScreen {
 			updateBook.setMaximumSize(new Dimension(175,30));
 			wishList.setMaximumSize(new Dimension(175,30));
 			bookbyyear.setMaximumSize(new Dimension(175,30));
+			statistics.setMaximumSize(new Dimension(175,30));
+
 
 			
 			if (file.createNewFile())
@@ -162,6 +165,18 @@ public class splashScreen {
 		        }
 		    });
 			
+			statistics.addActionListener(new ActionListener() {
+		        public void actionPerformed(ActionEvent e) {
+		        		try {
+							statisticsGUI();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+		        }
+		    });
+			
+			
 			
 			
 			actionPanel.setLayout(new BoxLayout(actionPanel, BoxLayout.Y_AXIS));
@@ -172,6 +187,7 @@ public class splashScreen {
 			actionPanel.add(updateBook);
 			actionPanel.add(wishList);
 			actionPanel.add(bookbyyear);
+			actionPanel.add(statistics);
 
 			
 			
@@ -1215,6 +1231,80 @@ public class splashScreen {
 			queryPanel.setLayout(new FlowLayout());
 			queryPanel.add(scroll);
 			queryPanel.setBorder(BorderFactory.createTitledBorder("RECENT BOOK HISTORY"));
+			queryPanel.revalidate();
+			queryPanel.repaint();
+		}
+		
+		public void statisticsGUI() throws IOException {
+			
+			queryPanel.removeAll();
+			
+			int totalBooks=0;
+			int readedBooks=0;
+			int notreadedbooks=0;
+			
+			int edebiyatNum=0;
+			int tarihNum=0;
+			int dinNum=0;
+			int felseNum=0;
+			int hobiNum=0;
+			int bilimNum=0;
+			int sanatNum=0;
+			int diger=0;
+			
+			JTable table = new JTable();
+			
+			String[] columnNames = {"BOOKID", "BOOKNAME", "AUTHOR_FNAME", "AUTHOR_LNAME", "PUBLISHER", "PRICE", "CATEGORY", "SUBCATEGORY", "PUBLISHDATE", "TRANSLATOR", "READ"};
+			DefaultTableModel model = new DefaultTableModel();
+			model.setColumnIdentifiers(columnNames);
+			table.setModel(model); 
+			table.getColumnModel().getColumn(0).setPreferredWidth(55);
+			table.getColumnModel().getColumn(1).setPreferredWidth(170);
+			table.getColumnModel().getColumn(2).setPreferredWidth(120);
+			table.getColumnModel().getColumn(3).setPreferredWidth(120);
+			table.getColumnModel().getColumn(4).setPreferredWidth(140);
+			table.getColumnModel().getColumn(5).setPreferredWidth(80);
+		    table.getColumnModel().getColumn(6).setPreferredWidth(100);
+		    table.getColumnModel().getColumn(7).setPreferredWidth(100);
+		    table.getColumnModel().getColumn(8).setPreferredWidth(60);
+		    table.getColumnModel().getColumn(9).setPreferredWidth(130);
+		    table.getColumnModel().getColumn(10).setPreferredWidth(50);
+		    //table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+		    table.setAutoResizeMode( JTable.AUTO_RESIZE_OFF );
+			table.setFillsViewportHeight(true);
+			table.setEnabled(false);
+		
+			JScrollPane scroll = new JScrollPane(table);
+			scroll.setPreferredSize(new Dimension(920, 300));
+			scroll.setHorizontalScrollBarPolicy(
+			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			scroll.setVerticalScrollBarPolicy(
+			JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED); 
+			
+			totalBooks = connect.showLibrary(table, model);
+		    readedBooks = connect.countLibrary(table);
+			notreadedbooks= (totalBooks - readedBooks);
+			edebiyatNum = connect.countCAT(table, "EDEBIYAT");
+			tarihNum = connect.countCAT(table, "ARASTIRMA-TARIH");
+			dinNum = connect.countCAT(table, "DIN-MITOLOJI");
+			felseNum = connect.countCAT(table, "FELSEFE");
+			hobiNum = connect.countCAT(table, "HOBI");
+			bilimNum = connect.countCAT(table, "BILIM");
+			sanatNum = connect.countCAT(table, "SANAT");
+			diger = connect.countCAT(table, "DIGER");
+			
+			
+			 JPanel results,results2;
+			 results = PieDemo.createDemoPanel(readedBooks,notreadedbooks);
+			 results.setPreferredSize(new Dimension(400,400));
+			 
+			 results2 = PieDemo.createDemoPanelCATSTAT(edebiyatNum, tarihNum, dinNum, felseNum, hobiNum, bilimNum, sanatNum, diger);
+			 results2.setPreferredSize(new Dimension(500,400));
+			 
+			queryPanel.setBorder(BorderFactory.createTitledBorder("LIBRARY STATISTICS"));
+			queryPanel.add(results);
+			queryPanel.add(results2);
+
 			queryPanel.revalidate();
 			queryPanel.repaint();
 		}

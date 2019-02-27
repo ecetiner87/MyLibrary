@@ -9,5 +9,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/derby.jar"/>
 	<classpathentry kind="lib" path="/home/erkance/Desktop/miglayout/miglayout-swing.jar"/>
+	<classpathentry kind="lib" path="/home/erkance/Desktop/jfreechart-1.0.1/lib/jfreechart-1.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/erkance/Desktop/jfreechart-1.0.1/lib/jcommon-1.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

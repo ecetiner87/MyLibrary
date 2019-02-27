@@ -1,7 +1,7 @@
 ----------------------------------------------------------------
-Tue Feb 12 14:36:25 EET 2019:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0168-e17e-6d8c-000007149c00 
-on database directory /home/erkance/repos/MyLibrary/appDemoSplashScreen/LibraryDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@1de0aca6 
+Wed Feb 27 10:42:47 EET 2019:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0169-2de7-eb1c-000007156800 
+on database directory /home/erkance/repos/MyLibrary/appDemoSplashScreen/LibraryDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@255316f2 
 Loaded from file:/home/erkance/repos/MyLibrary/appDemoSplashScreen/lib/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=10.0.2+13-Ubuntu-1ubuntu0.18.04.4
