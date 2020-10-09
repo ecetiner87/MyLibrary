@@ -4,25 +4,20 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.FileDialog;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Frame;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -43,7 +38,6 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JWindow;
-import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -55,7 +49,7 @@ import net.miginfocom.swing.MigLayout;
 
 /**
  * @author erkance
- * Bibliophile v1.0 is the Library Application which helps you to keep your book records.
+ * Bibliophile v2.0 is the Library Application which helps you to keep your book records.
  */
 
 
@@ -159,7 +153,7 @@ public class splashScreen {
 		        		try {
 							bookhistoryGUI();
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
+							
 							e1.printStackTrace();
 						}
 		        }
@@ -170,7 +164,7 @@ public class splashScreen {
 		        		try {
 							statisticsGUI();
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
+							
 							e1.printStackTrace();
 						}
 		        }
@@ -588,7 +582,7 @@ public class splashScreen {
 		        	            os.close();
 		        	            System.out.println("Done!");
 		        	        } catch (IOException e2) {
-		        	            // TODO Auto-generated catch block
+		        	            
 		        	            e2.printStackTrace();
 		        	        }
 		        	    }
@@ -906,26 +900,26 @@ public class splashScreen {
 									writer = new BufferedWriter(
 									            new FileWriter(file, true));
 								} catch (IOException e1) {
-									// TODO Auto-generated catch block
+									
 									e1.printStackTrace();
 								} 
 			        	 		 try {
 									writer.newLine();
 									writer.newLine();
 								} catch (IOException e1) {
-									// TODO Auto-generated catch block
+								
 									e1.printStackTrace();
 								}   
 			        	 		 try {
 									writer.write(textToAppend);
 								} catch (IOException e1) {
-									// TODO Auto-generated catch block
+								
 									e1.printStackTrace();
 								}
 			        	 		 try {
 									writer.close();
 								} catch (IOException e1) {
-									// TODO Auto-generated catch block
+									
 									e1.printStackTrace();
 								}
 			        	 		
@@ -1029,7 +1023,7 @@ public class splashScreen {
 			
 			boughtButton.addActionListener(new ActionListener() {
 		        public void actionPerformed(ActionEvent e) {
-	        		DefaultTableModel model = (DefaultTableModel)table.getModel();
+	        		//DefaultTableModel model = (DefaultTableModel)table.getModel();
 	            	int row = table.getSelectedRow();
 		        	if(row >= 0) {
 		        	int dialogBought=JOptionPane.showConfirmDialog(null,"Do you want to buy this book online?", "BUY?",JOptionPane.YES_NO_OPTION);
@@ -1040,12 +1034,13 @@ public class splashScreen {
 		            	
 		            	Desktop d = Desktop.getDesktop();
 		            	try {
-							d.browse(new URI("https://www.google.com/search?q="+searchname+"&source=univ&tbm=shop"));
+							URI uri=new URI(searchname.replace(" ", "%20"));
+							d.browse(new URI("https://www.google.com/search?q="+uri+"&source=univ&tbm=shop"));
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
+							
 							e1.printStackTrace();
 						} catch (URISyntaxException e1) {
-							// TODO Auto-generated catch block
+							
 							e1.printStackTrace();
 						}
 		            	
@@ -1337,7 +1332,7 @@ public class splashScreen {
 	    }
 
 	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
+		
 		JWindow window = new JWindow();
 
 		Icon imagesplash = new ImageIcon(("images/mylib.jpg")); 

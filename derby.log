@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Fri Oct 09 16:44:54 EET 2020:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0175-0d9b-778f-000007cf5df0 
+on database directory /Users/ecetiner/Desktop/DEVOPS/MyLibrary/LibraryDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@799f7e29 
+Loaded from file:/Users/ecetiner/Desktop/DEVOPS/MyLibrary/appDemoSplashScreen/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=11.0.2+9-LTS
+user.dir=/Users/ecetiner/Desktop/DEVOPS/MyLibrary
+os.name=Mac OS X
+os.arch=x86_64
+os.version=10.15.7
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

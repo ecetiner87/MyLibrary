@@ -32,7 +32,7 @@ public class DBConnection {
 			try {
 				Class.forName(DRIVER);
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			
@@ -42,7 +42,7 @@ public class DBConnection {
 					System.out.println("Connected to DB");
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			
@@ -72,7 +72,7 @@ public class DBConnection {
 							System.out.println("LIBRARY Table Created on Derby DB!");
 						}
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}	
 		}
@@ -94,7 +94,7 @@ public class DBConnection {
 							System.out.println("WISHLIST Table Created on Derby DB!");
 						}
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}	
 		}
@@ -126,7 +126,7 @@ public class DBConnection {
 				}
 				}
 				catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			
@@ -172,7 +172,7 @@ public class DBConnection {
 							
 				}
 				catch (SQLException e) {
-				// TODO Auto-generated catch block
+			
 				e.printStackTrace();
 			}
 			return totalCount;
@@ -195,7 +195,7 @@ public class DBConnection {
 				}
 				}
 				catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			
@@ -217,7 +217,7 @@ public class DBConnection {
 				}
 				}
 				catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			
@@ -253,7 +253,7 @@ public class DBConnection {
 				}
 				}
 				catch (SQLException e) {
-				// TODO Auto-generated catch block
+			
 				e.printStackTrace();
 			}
 			return result;
@@ -299,7 +299,7 @@ public class DBConnection {
 							
 				}
 				catch (SQLException e) {
-				// TODO Auto-generated catch block
+		
 				e.printStackTrace();
 			}					
 		}
@@ -320,7 +320,7 @@ public class DBConnection {
 				}
 				}
 				catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			
@@ -351,7 +351,7 @@ public class DBConnection {
 				}
 				}
 				catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 				
 			}
@@ -384,7 +384,7 @@ public class DBConnection {
 						
 			}
 			catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -405,7 +405,7 @@ public class DBConnection {
 				}
 				}
 				catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			
@@ -440,7 +440,7 @@ public class DBConnection {
 				totalReadCount = rs.getInt("MY_COUNT");		
 				}
 				catch (SQLException e) {
-				// TODO Auto-generated catch block
+				// Auto-generated catch block
 				e.printStackTrace();
 			}
 			return totalReadCount;
@@ -462,7 +462,7 @@ public class DBConnection {
 				totalCount = rs.getInt("MY_COUNT");		
 				}
 				catch (SQLException e) {
-				// TODO Auto-generated catch block
+			
 				e.printStackTrace();
 			}
 			return totalCount;
@@ -482,7 +482,7 @@ public class DBConnection {
 				totalPrice = rs.getDouble("LIBRPRICE");		
 				}
 				catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			return totalPrice;

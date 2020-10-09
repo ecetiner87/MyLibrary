@@ -1,0 +1,8 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "appDemoSplashScreen/lib/miglayout/miglayout-swing.jar",
+        "appDemoSplashScreen/lib/jfreechart-1.0.1/lib/jcommon-1.0.0.jar",
+        "appDemoSplashScreen/lib/jfreechart-1.0.1/lib/jfreechart-1.0.1.jar"
+    ]
+}
