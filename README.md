@@ -87,6 +87,13 @@ Double Click on related exe file!
 
 ![Statistics](https://user-images.githubusercontent.com/43776056/59438229-c866d180-8dfb-11e9-92f7-97efe93fcb50.png)
 
+#### Borrowed Books
+* You can visualize your borrowed books:
+      * To whom you borrow your books
+      * How long it passed
+      * When you borrow your books
+      * Action: You can clear borrowed status when a book returned.
+
 
 ## Built With
 

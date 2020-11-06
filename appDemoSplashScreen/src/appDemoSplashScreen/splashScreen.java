@@ -42,6 +42,7 @@ import javax.swing.table.DefaultTableModel;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -57,12 +58,12 @@ public class splashScreen {
 	
 	static class myGUI{
 
-		JFrame frame = new JFrame("BiblioPhile 2.0");
+		JFrame frame = new JFrame("BiblioPhile 3.0");
 		JPanel actionPanel, queryPanel;
 		JMenuBar menuBar;
 		JMenu fileMenu, helpMenu;
 		JMenuItem about,quitItem;
-		JButton showLibrary, addBook, deleteBook, searchBook, updateBook, wishList, bookbyyear,statistics;  
+		JButton showLibrary, addBook, deleteBook, searchBook, updateBook, wishList, bookbyyear,statistics,borrowed;  
 		Image appLogo;
 		DBConnection connect = new DBConnection();
 		File file = new File("testFile1.txt");
@@ -90,6 +91,7 @@ public class splashScreen {
 			wishList = new JButton("WishList");
 			bookbyyear = new JButton("Read History");
 			statistics = new JButton("Statistics");
+			borrowed = new JButton("Borrowed Books");
 
 
 			
@@ -101,7 +103,7 @@ public class splashScreen {
 			wishList.setMaximumSize(new Dimension(175,30));
 			bookbyyear.setMaximumSize(new Dimension(175,30));
 			statistics.setMaximumSize(new Dimension(175,30));
-
+			borrowed.setMaximumSize(new Dimension(175,30));
 
 			
 			if (file.createNewFile())
@@ -171,6 +173,11 @@ public class splashScreen {
 		    });
 			
 			
+			borrowed.addActionListener(new ActionListener() {
+		        public void actionPerformed(ActionEvent e) {
+		        		borrowGUI();
+		        }
+		    });
 			
 			
 			actionPanel.setLayout(new BoxLayout(actionPanel, BoxLayout.Y_AXIS));
@@ -182,7 +189,7 @@ public class splashScreen {
 			actionPanel.add(wishList);
 			actionPanel.add(bookbyyear);
 			actionPanel.add(statistics);
-
+			actionPanel.add(borrowed);
 			
 			
 			queryPanel.add(imagelabel);		
@@ -208,7 +215,7 @@ public class splashScreen {
 	                    awindow.setSize(400,400);
 	                    awindow.getContentPane().setBackground(Color.LIGHT_GRAY);
 	                    awindow.setLocationRelativeTo(null);
-	                    awindow.setTitle("About Bibliophile 1.0");
+	                    awindow.setTitle("About Bibliophile 3.0");
 	                    
 	                    JPanel mypanel = new JPanel();
 	                    
@@ -216,7 +223,7 @@ public class splashScreen {
 	                    JTextArea textArea = new JTextArea(
 	                    	    "This desktop application is an open source project written in Java." + 
 	                    	    "The purpose of this application is keeping book records and searching when requested.\n" + 
-	                    	    "\nVersion: v1.0\n" + 
+	                    	    "\nVersion: v3.0\n" + 
 	                    	    "\nCreated By: Erkan Cetiner\n" + 
 	                    	    "\ne-mail: ecetiner87@gmail.com\n"
 	                    	    
@@ -247,7 +254,7 @@ public class splashScreen {
 
 	       
 	        
-	        frame.setSize(1350,500);
+	        frame.setSize(1350,650);
 	        frame.setIconImage(appLogo);
 	        frame.setJMenuBar(menuBar);	
 	        frame.setLayout(new BorderLayout());
@@ -255,7 +262,7 @@ public class splashScreen {
 			frame.add(queryPanel, BorderLayout.CENTER);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setLocationRelativeTo(null);
-			frame.setResizable(false);
+			frame.setResizable(true);
 			
 			
 		}
@@ -512,17 +519,17 @@ public class splashScreen {
 			DefaultTableModel model = new DefaultTableModel();
 			model.setColumnIdentifiers(columnNames);
 			table.setModel(model); 
-			table.getColumnModel().getColumn(0).setPreferredWidth(55);
-			table.getColumnModel().getColumn(1).setPreferredWidth(170);
-			table.getColumnModel().getColumn(2).setPreferredWidth(120);
-			table.getColumnModel().getColumn(3).setPreferredWidth(120);
-			table.getColumnModel().getColumn(4).setPreferredWidth(140);
-			table.getColumnModel().getColumn(5).setPreferredWidth(80);
-		    table.getColumnModel().getColumn(6).setPreferredWidth(100);
-		    table.getColumnModel().getColumn(7).setPreferredWidth(100);
-		    table.getColumnModel().getColumn(8).setPreferredWidth(60);
-		    table.getColumnModel().getColumn(9).setPreferredWidth(130);
-		    table.getColumnModel().getColumn(10).setPreferredWidth(50);
+			table.getColumnModel().getColumn(0).setPreferredWidth(50);
+			table.getColumnModel().getColumn(1).setPreferredWidth(150);
+			table.getColumnModel().getColumn(2).setPreferredWidth(100);
+			table.getColumnModel().getColumn(3).setPreferredWidth(100);
+			table.getColumnModel().getColumn(4).setPreferredWidth(120);
+			table.getColumnModel().getColumn(5).setPreferredWidth(70);
+		    table.getColumnModel().getColumn(6).setPreferredWidth(80);
+		    table.getColumnModel().getColumn(7).setPreferredWidth(80);
+		    table.getColumnModel().getColumn(8).setPreferredWidth(50);
+		    table.getColumnModel().getColumn(9).setPreferredWidth(110);
+		    table.getColumnModel().getColumn(10).setPreferredWidth(30);
 		    //table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 		    table.setAutoResizeMode( JTable.AUTO_RESIZE_OFF );
 			table.setFillsViewportHeight(true);
@@ -1206,6 +1213,16 @@ public class splashScreen {
 		public void bookhistoryGUI() throws IOException {
 			
 			queryPanel.removeAll();
+			JPanel yearStats = new JPanel();
+			JLabel allyears= new JLabel("BOOKS ALL YEARS:");
+			JLabel currentYear= new JLabel("BOOKS THIS YEAR:");
+			JLabel lastYear= new JLabel("BOOKS LAST YEAR:");
+			JTextField allYearsField = new JTextField(30);
+			allYearsField.setMaximumSize(new Dimension(175,30));
+			JTextField currentYearField = new JTextField(30);
+			currentYearField.setMaximumSize(new Dimension(175,30));
+			JTextField lastYearField = new JTextField(30);
+			lastYearField.setMaximumSize(new Dimension(175,30));
 			JTextArea textbox = new JTextArea(25,80);
 			
 			
@@ -1218,18 +1235,265 @@ public class splashScreen {
 			
 			BufferedReader in = new BufferedReader(new FileReader(file));
 			String line = in.readLine();
+			int allreadcount = 0;
+			int currentyearcount = 0;
+			int lastyearcount = 0;
+
+			//long currenttime = System.currentTimeMillis();
+		//	Date curyear = new Date(currenttime);
+		//	int year = curyear.getYear();
+			
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+			Date date = new Date (System.currentTimeMillis());
+			String yearcurrent = formatter.format(date);
+			int lasty = Integer.parseInt(yearcurrent);
+			int lastYR = (lasty - 1);
+			String yearlast = Integer.toString(lastYR);
+			
 			while(line != null){
+				if(line.contains("***")){
+					allreadcount++;
+				}
+				if( line.contains(yearcurrent))
+				{
+					currentyearcount++;
+				}
+				if( line.contains(yearlast))
+				{
+					lastyearcount++;
+				}
 			  textbox.append(line + "\n");
 			  line = in.readLine();
 			}
+			String alyears = Integer.toString(allreadcount);
+			allYearsField.setText(alyears);
+		
+			String curyears = Integer.toString(currentyearcount);
+			currentYearField.setText(curyears);
+
+			String lasyers = Integer.toString(lastyearcount);
+			lastYearField.setText(lasyers);
+
+			yearStats.setBorder(BorderFactory.createTitledBorder("BOOKS BY YEAR"));
+			yearStats.setLayout(new MigLayout());
+			yearStats.add(allyears, "align label");
+			yearStats.add(allYearsField, "wrap");
+			yearStats.add(currentYear, "align label");
+			yearStats.add(currentYearField, "wrap");
+			yearStats.add(lastYear, "align label");
+			yearStats.add(lastYearField, "wrap");
 			
-			queryPanel.setLayout(new FlowLayout());
+
+			queryPanel.setLayout(new BoxLayout(queryPanel, BoxLayout.Y_AXIS));
 			queryPanel.add(scroll);
+			queryPanel.add(yearStats);
 			queryPanel.setBorder(BorderFactory.createTitledBorder("RECENT BOOK HISTORY"));
 			queryPanel.revalidate();
 			queryPanel.repaint();
 		}
 		
+		public void borrowGUI() {
+			queryPanel.removeAll();
+			JPanel list = new JPanel();
+			JPanel updatePanel = new JPanel();
+			
+			JTable table = new JTable();
+			
+			String[] columnNames = {"BOOKID", "BOOKNAME", "AUTHOR_FNAME", "AUTHOR_LNAME", "PUBLISHER", "PRICE", "CATEGORY", "SUBCATEGORY", "PUBLISHDATE", "TRANSLATOR", "READ"};
+			DefaultTableModel model = new DefaultTableModel();
+			model.setColumnIdentifiers(columnNames);
+			table.setModel(model); 
+			table.getColumnModel().getColumn(0).setPreferredWidth(55);
+			table.getColumnModel().getColumn(1).setPreferredWidth(170);
+			table.getColumnModel().getColumn(2).setPreferredWidth(120);
+			table.getColumnModel().getColumn(3).setPreferredWidth(120);
+			table.getColumnModel().getColumn(4).setPreferredWidth(140);
+			table.getColumnModel().getColumn(5).setPreferredWidth(80);
+		    table.getColumnModel().getColumn(6).setPreferredWidth(100);
+		    table.getColumnModel().getColumn(7).setPreferredWidth(100);
+		    table.getColumnModel().getColumn(8).setPreferredWidth(60);
+		    table.getColumnModel().getColumn(9).setPreferredWidth(130);
+		    table.getColumnModel().getColumn(10).setPreferredWidth(50);
+		    //table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+		    table.setAutoResizeMode( JTable.AUTO_RESIZE_OFF );
+			table.setFillsViewportHeight(true);
+			table.setAutoCreateRowSorter(true);
+
+			JScrollPane scroll = new JScrollPane(table);
+			scroll.setPreferredSize(new Dimension(920, 200));
+			scroll.setHorizontalScrollBarPolicy(
+			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			scroll.setVerticalScrollBarPolicy(
+			JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED); 
+
+		
+			
+			connect.showLibrary(table, model);
+		
+        	
+			JButton update = new JButton("BORROW");
+			JLabel idName = new JLabel("ID:");
+        	idName.setMaximumSize(new Dimension(175,30));		
+			JLabel bookname = new JLabel("Book Name:");
+        	bookname.setMaximumSize(new Dimension(175,30));		
+        	JLabel borrowedto = new JLabel("BORROWED TO:");
+        	borrowedto.setMaximumSize(new Dimension(175,30));		
+        	
+			JTextField idField, bookNameField, borrowedtoField; 
+			idField = new JTextField(30);
+			idField.setMaximumSize(new Dimension(175,30));	
+        	idField.setEditable(false);
+        	bookNameField = new JTextField(30);
+			bookNameField.setMaximumSize(new Dimension(175,30));	
+			bookNameField.setEditable(false);
+			borrowedtoField = new JTextField(30);
+			borrowedtoField.setMaximumSize(new Dimension(175,30));	
+			borrowedtoField.setEditable(false);
+
+			
+			
+			JButton updateBook = new JButton("SELECT");
+			updateBook.addActionListener(new ActionListener() {
+		        public void actionPerformed(ActionEvent e) {
+		        	int row;
+		            int id ;
+		            
+		            if(table.getSelectionModel().isSelectionEmpty()) {
+		            	
+		            	 JOptionPane.showMessageDialog(null, "You should select a row first.","Alert",JOptionPane.WARNING_MESSAGE);    
+		            }
+		            else {
+		            
+		        	int dialogUpdate=JOptionPane.showConfirmDialog(null,"Are you sure you want to borrow this book?", "BORROW BOOK",JOptionPane.YES_NO_OPTION);
+		            
+		        	if(dialogUpdate==JOptionPane.YES_OPTION){      
+		        		row = table.getSelectedRow();
+		            	id = Integer.parseInt(table.getValueAt(row, 0).toString());
+		            	
+						bookNameField.setEditable(true);
+						borrowedtoField.setEditable(true);
+		            	
+		            	
+		            	String book = (table.getValueAt(row, 1).toString());
+		            	
+		            	
+		            	System.out.println(book);
+		            	
+		            	idField.setText(table.getValueAt(row, 0).toString());
+						bookNameField.setText(book);			
+		            	System.out.println(id);
+		            }
+		            }
+		        	 }
+		    });
+			
+			update.addActionListener(new ActionListener() {
+		        public void actionPerformed(ActionEvent e) {
+		        	int result=0;
+
+			        if ( bookNameField.getText().isEmpty() ||borrowedtoField.getText().isEmpty())
+			        {
+			        		 JOptionPane.showMessageDialog(null, "Please update all fields accordingly.","Alert",JOptionPane.WARNING_MESSAGE);    
+			        	 }
+		            
+			         else
+					{	
+						long millis=System.currentTimeMillis();
+						Date currentBorrowDate = new Date(millis);
+						result=connect.insertToBorrow(bookNameField.getText(), borrowedtoField.getText(), currentBorrowDate);
+			        	 
+		        		 if(result==1) {
+			        	 JOptionPane.showMessageDialog(null, "Record Added to BORROW LIST Successfully!","SUCCESS",JOptionPane.INFORMATION_MESSAGE); 
+		        		 }
+		        		 else
+		        		 {
+				        	 JOptionPane.showMessageDialog(null, "Record Could NOT be updated. Error!","ERROR",JOptionPane.ERROR_MESSAGE);    
+		        		 }
+		        	 }
+			}
+		});
+		JTable borrowtable = new JTable();
+			
+		String[] columns = {"BOOK_ID", "BOOKNAME", "BORROWED TO", "WHEN"};
+		DefaultTableModel borrowmodel = new DefaultTableModel();
+		borrowmodel.setColumnIdentifiers(columns);
+		borrowtable.setModel(borrowmodel); 
+		borrowtable.getColumnModel().getColumn(0).setPreferredWidth(50);
+		borrowtable.getColumnModel().getColumn(1).setPreferredWidth(175);
+		borrowtable.getColumnModel().getColumn(2).setPreferredWidth(175);
+		borrowtable.getColumnModel().getColumn(3).setPreferredWidth(175);
+	
+
+		//table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+		borrowtable.setAutoResizeMode( JTable.AUTO_RESIZE_OFF );
+		borrowtable.setFillsViewportHeight(true);
+	
+		JScrollPane borrowscroll = new JScrollPane(borrowtable);
+		borrowscroll.setPreferredSize(new Dimension(195, 150));
+		borrowscroll.setHorizontalScrollBarPolicy(
+		JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		borrowscroll.setVerticalScrollBarPolicy(
+		JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED); 
+		
+		connect.showBorrowList(borrowtable, borrowmodel);
+		JButton returnedButton = new JButton("RETURNED");
+		
+		returnedButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(borrowtable.getSelectionModel().isSelectionEmpty()) {
+					
+					 JOptionPane.showMessageDialog(null, "You should select a row first.","Alert",JOptionPane.WARNING_MESSAGE);    
+				}
+				else {
+				int dialogDelete=JOptionPane.showConfirmDialog(null,"Is this book returned to library?", "RETURNED BOOK",JOptionPane.YES_NO_OPTION);
+				
+				if(dialogDelete==JOptionPane.YES_OPTION){      
+					DefaultTableModel model = (DefaultTableModel)borrowtable.getModel();
+					int row = borrowtable.getSelectedRow();
+					int id = Integer.parseInt(borrowtable.getValueAt(row, 0).toString());
+					int modelRow = borrowtable.convertRowIndexToModel( row );
+					model.removeRow( modelRow );
+				
+					System.out.println(id);
+					connect.deleteBorrowedBook(id);
+				}
+				 }
+			}
+	   });
+		
+
+			list.add(scroll);
+			list.add(updateBook);
+			
+			JPanel bottomPanel = new JPanel();
+			JPanel borrowPanel = new JPanel();
+
+        	updatePanel.setLayout(new MigLayout());
+        	updatePanel.add(idName, "align label");
+			updatePanel.add(idField, "wrap");
+			updatePanel.add(bookname, "align label");
+			updatePanel.add(bookNameField, "wrap");
+			updatePanel.add(borrowedto, "align label");
+			updatePanel.add(borrowedtoField, "wrap");
+			updatePanel.add(update, "align label"); 
+
+			
+			borrowPanel.add(borrowscroll);
+			borrowPanel.add(returnedButton);
+
+			bottomPanel.setLayout(new MigLayout());
+			bottomPanel.add(updatePanel);
+			bottomPanel.add(borrowPanel);
+			
+			queryPanel.setBorder(BorderFactory.createTitledBorder("BOOKS BORROWED"));
+			queryPanel.setLayout(new BoxLayout(queryPanel, BoxLayout.Y_AXIS));
+			queryPanel.add(list);
+			queryPanel.add(bottomPanel);
+			queryPanel.revalidate();
+			queryPanel.repaint();
+		}
+
 		public void statisticsGUI() throws IOException {
 			
 			queryPanel.removeAll();
@@ -1335,7 +1599,7 @@ public class splashScreen {
 		
 		JWindow window = new JWindow();
 
-		Icon imagesplash = new ImageIcon(("images/mylib.jpg")); 
+		Icon imagesplash = new ImageIcon(("images/mylibnew.jpg")); 
 		JLabel splashlable = new JLabel(imagesplash);
 
 		window.getContentPane().add(splashlable);

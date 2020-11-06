@@ -6,6 +6,7 @@ package appDemoSplashScreen;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -101,7 +102,31 @@ public class DBConnection {
 			else {
 				System.out.println("WISHLIST Table already exists on Derby DB! Skipping...");
 			}
+
+
+			if ( ! tableExists( conn, "BORROWS" ) )  {
+				System.out.println("BORROWS Table does not exists on Derby DB! Creating...");
+					try {
+						conn.createStatement().execute("CREATE TABLE BORROWS\n" + 
+								"(  \"BOOK_ID\" INT not null primary key\n" + 
+								"        GENERATED ALWAYS AS IDENTITY,\n" + 
+								"   \"BOOKNAME\" VARCHAR(50),\n" + 
+								"   \"BORROWED_TO\" VARCHAR(50),\n" + 
+								"   \"WHEN\" DATE not null)");
+						
+						if (this.conn != null) {
+							System.out.println("BORROWS Table Created on Derby DB!");
+						}
+					} catch (SQLException e) {
+						
+						e.printStackTrace();
+					}	
 		}
+			else {
+				System.out.println("BORROWS Table already exists on Derby DB! Skipping...");
+			}
+		}
+
 		public  void insertToTable(String bookName,String authorFname, String authorLname, String publisher,double price,String category,String subcategory,String readed, int Date, String trnsltr) {
 			try {
 				
@@ -401,7 +426,34 @@ public class DBConnection {
 				if (this.conn != null) {
 					System.out.println("Record added to Wishlist Table!");
 					conn.createStatement().close();
+					
+				}
+				}
+				catch (SQLException e) {
 				
+				e.printStackTrace();
+			}
+		
+		}
+
+		public  int insertToBorrow(String bookName,String borrowedto, Date borrowdate) {
+		int result=0;
+
+			try {
+				
+				String insertSQL = "INSERT INTO BORROWS (BOOKNAME, BORROWED_TO, WHEN) VALUES (?, ?, ?)";
+				PreparedStatement ps = conn.prepareStatement(insertSQL);
+				
+				
+				ps.setString(1, bookName);
+				ps.setString(2, borrowedto);
+				ps.setDate(3, borrowdate);
+				ps.executeUpdate();
+	
+				if (this.conn != null) {
+					System.out.println("Record added to BORROWS Table!");
+					conn.createStatement().close();
+					result=1;
 				}
 				}
 				catch (SQLException e) {
@@ -409,9 +461,65 @@ public class DBConnection {
 				e.printStackTrace();
 			}
 			
+			return result;
 		}
 		
+		public  void showBorrowList(JTable table, DefaultTableModel model) {
+			
+			
+		    String bookid = "";
+			String bookname = "";
+			String borrowed = "";
+			Date borrowdate = null;
+			
+			
+			try
+			{ 
+			
+			String sql = "select * from BORROWS";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			java.sql.ResultSet rs =  ps.executeQuery();
+			
+				while(rs.next())
+				{
+				bookid = rs.getString("BOOK_ID");
+				bookname = rs.getString("BOOKNAME");
+				borrowed = rs.getString("BORROWED_TO");
+				borrowdate = rs.getDate("WHEN");
+
+				model.addRow(new Object[]{bookid, bookname, borrowed,borrowdate});
+				}
+						
+			}
+			catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+	}
 		
+	public  void deleteBorrowedBook(int id) {
+		try {
+			
+			
+			String deleteSQL = "DELETE FROM BORROWS WHERE BOOK_ID = ?";
+			PreparedStatement stmt = conn.prepareStatement(deleteSQL);
+			stmt.setInt( 1, id );
+			stmt.executeUpdate();
+			stmt.close();
+
+			if (this.conn != null) {
+				System.out.println("Record deleted from BORROWS Successfully!");
+				conn.createStatement().close();
+			
+			}
+			}
+			catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		
+	}
+
 		 private static boolean tableExists ( Connection con, String table ) {
 			    int numRows = 0;
 			    try {
