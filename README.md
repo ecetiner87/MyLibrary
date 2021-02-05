@@ -1,4 +1,4 @@
-# Bibliophile - Test
+# Bibliophile - Test In Progress
 
 Bibliophile is a JAVA desktop application and used for keeping records of any personal library. The idea behind the application is keeping a database of book records, add/delete book to/from db, generating wishlists/searching wished books for online shopping and to determine the exact number of books that you read or not. 
 
